@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import ItemCard from "../components/ItemCard";
 const categoriesMock = [
   {
     id: 1,
@@ -50,35 +50,7 @@ function Home() {
           <h2 className="text-2xl font-semibold mb-4">{cat.name}</h2>
           <div className="grid grid-cols-2 max-[470px]:grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
             {cat.items.map((item) => (
-              <div
-                key={item.id}
-                className="border rounded-xl shadow-md p-4 hover:shadow-lg transition"
-              >
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-40 object-cover rounded-lg mb-3"
-                />
-                <h3 className="text-lg font-semibold">{item.title}</h3>
-                <p className="text-gray-600">{item.description}</p>
-                <div className="mt-2">
-                  {item.discountPrice ? (
-                    <>
-                      <span className="text-red-500 font-bold mr-2">
-                        ${item.discountPrice}
-                      </span>
-                      <span className="line-through text-gray-400">
-                        ${item.price}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="font-bold">${item.price}</span>
-                  )}
-                </div>
-                <button className="mt-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-                  Comprar
-                </button>
-              </div>
+              <ItemCard key={item.id} item={item} />
             ))}
           </div>
         </div>

@@ -1,31 +1,30 @@
-function Dashboard() {
-  return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 text-white p-6">
-        <h2 className="text-xl font-bold mb-6">Admin Dashboard</h2>
-        <nav className="flex flex-col gap-4">
-          <a href="#" className="hover:bg-gray-700 p-2 rounded">
-            Categorías
-          </a>
-          <a href="#" className="hover:bg-gray-700 p-2 rounded">
-            Productos
-          </a>
-          <a href="#" className="hover:bg-gray-700 p-2 rounded">
-            Usuarios
-          </a>
-          <a href="#" className="hover:bg-gray-700 p-2 rounded">
-            Roles & Permisos
-          </a>
-        </nav>
-      </aside>
+import { Routes, Route } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
+import { useAuth } from "../context/AuthContext";
 
-      {/* Main content */}
-      <main className="flex-1 p-8 bg-gray-100 overflow-y-auto">
-        <h1 className="text-2xl font-bold mb-4">Bienvenido al Dashboard</h1>
-        <p className="text-gray-600">
-          Aquí podrás administrar categorías, productos, usuarios y más.
-        </p>
+function Dashboard() {
+  const { logout } = useAuth();
+
+  return (
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar />
+      <main className="flex-1 p-10 overflow-y-auto">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <button
+            onClick={logout}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
+          >
+            Cerrar sesión
+          </button>
+        </div>
+        <Routes>
+          <Route path="/" element={<h1>Bienvenido al Dashboard</h1>} />
+          <Route path="categories" element={<h2>Gestión de Categorías</h2>} />
+          <Route path="products" element={<h2>Gestión de Productos</h2>} />
+          <Route path="users" element={<h2>Gestión de Usuarios</h2>} />
+          <Route path="roles" element={<h2>Gestión de Roles & Permisos</h2>} />
+        </Routes>
       </main>
     </div>
   );
