@@ -1,31 +1,27 @@
 import { NavLink } from "react-router-dom";
 
 function Sidebar() {
-  const links = [
-    { to: "/dashboard/categories", label: "Categorías" },
-    { to: "/dashboard/products", label: "Productos" },
-    { to: "/dashboard/users", label: "Usuarios" },
-    { to: "/dashboard/roles", label: "Roles & Permisos" },
-  ];
+  const activeClass = "bg-gray-500 text-white rounded-lg px-4 py-2 block";
+  const normalClass = "text-white-700 hover:bg-gray-200 rounded-lg px-4 py-2 block";
 
   return (
-    <aside className="w-64 bg-gray-900 text-white p-6">
-      <h2 className="text-xl font-bold mb-8">Admin Panel</h2>
-      <nav className="flex flex-col gap-4">
-        {links.map((link) => (
-          <NavLink
-            key={link.to}
-            to={link.to}
-            className={({ isActive }) =>
-              `p-2 rounded transition ${
-                isActive ? "bg-blue-600" : "hover:bg-gray-800"
-              }`
-            }
-          >
-            {link.label}
-          </NavLink>
-        ))}
-      </nav>
+    <aside className="w-64 bg-gray-800 text-white p-6 flex flex-col gap-4 min-h-screen">
+      <h2 className="text-xl font-bold mb-6">Dashboard</h2>
+      <NavLink to="/dashboard" end className={({ isActive }) => isActive ? activeClass : normalClass}>
+        Inicio
+      </NavLink>
+      <NavLink to="/dashboard/users" className={({ isActive }) => isActive ? activeClass : normalClass}>
+        Usuarios
+      </NavLink>
+      <NavLink to="/dashboard/roles" className={({ isActive }) => isActive ? activeClass : normalClass}>
+        Roles & Permisos
+      </NavLink>
+      <NavLink to="/dashboard/categories" className={({ isActive }) => isActive ? activeClass : normalClass}>
+        Categorías
+      </NavLink>
+      <NavLink to="/dashboard/products" className={({ isActive }) => isActive ? activeClass : normalClass}>
+        Productos
+      </NavLink>
     </aside>
   );
 }
