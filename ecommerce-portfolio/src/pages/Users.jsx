@@ -1,12 +1,31 @@
 import { useState, useEffect } from "react";
 import { BsFillPlusCircleFill, BsFillTrash3Fill, BsPencilFill } from "react-icons/bs";
+import Toast from '../components/Toast';
+import { validateForm } from '../utils/validator';
 
 function Users() {
   const [users, setUsers] = useState([]);
   const [form, setForm] = useState({ name: "", email: "", role: "viewer", password: "" });
   const [errors, setErrors] = useState({});
   const [editingId, setEditingId] = useState(null);
+  const [toast, setToast] = useState(null);
 
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+  }
+
+  //reglas declarativas para este CRUD, se pueden reutilizar en otros formularios
+  const rules = {
+    name: [{ type: 'required', message: 'El nombre es obligatorio' }],
+    email: [
+      { type: 'required', message: 'El email es obligatorio' },
+      { type: 'email', message: 'Formato de email inválido' }
+    ],
+    password: [
+      { type: 'required', message: 'La contraseña es obligatoria' },
+      { type: 'minLength', value: 4, message: 'Mínimo 4 carácteres' }
+    ]
+  }
   // Inicializar admin fijo
   useEffect(() => {
     const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
@@ -26,21 +45,13 @@ function Users() {
     }
   }, []);
 
-  // Validación de formulario
-  const validate = () => {
-    const newErrors = {};
-    if (!form.name.trim()) newErrors.name = "Nombre requerido";
-    if (!form.email.trim()) newErrors.email = "Email requerido";
-    else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = "Email inválido";
-    if (!form.password.trim()) newErrors.password = "Contraseña requerida";
-    return newErrors;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validationErrors = validate();
+
+    const validationErrors = validateForm(form, rules); //uso del validador genérico 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      showToast("Errores en el formulario", "error");
       return;
     }
 
@@ -52,11 +63,13 @@ function Users() {
       setUsers(updatedUsers);
       localStorage.setItem("users", JSON.stringify(updatedUsers));
       setEditingId(null);
+      showToast("Usuario Actualizado", "success");
     } else {
       // Crear nuevo usuario
       const newUser = { ...form, id: Date.now() };
       const updatedUsers = [...users, newUser];
       setUsers(updatedUsers);
+      showToast("Usuario Agregado", "success");
       localStorage.setItem("users", JSON.stringify(updatedUsers));
     }
 
@@ -69,6 +82,7 @@ function Users() {
     if (user.fixed) return; // no se puede borrar
     const updatedUsers = users.filter((u) => u.id !== id);
     setUsers(updatedUsers);
+    showToast("Usuario Eliminado", "error");
     localStorage.setItem("users", JSON.stringify(updatedUsers));
   };
 
@@ -156,6 +170,15 @@ function Users() {
           ))}
         </tbody>
       </table>
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          duration={3000}
+          onClose={() => setToast(null)}
+        />
+      )}
+
     </div>
   );
 }
