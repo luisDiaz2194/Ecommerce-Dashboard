@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BsFillPlusCircleFill, BsFillTrash3Fill, BsPencilFill } from "react-icons/bs";
 import Toast from "../components/Toast";
 import { validateForm } from "../utils/validator";
-
+import { Link } from "react-router-dom";
 function Products() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -145,6 +145,13 @@ function Products() {
 
   return (
     <div>
+      {/* 🔹 Link hacia listado de productos por categorías */}
+      <Link
+        to="/dashboard/productos-por-categorias"
+        className="text-blue-600 underline mb-4 inline-block"
+      >
+        Ver listado de productos por categorías
+      </Link>
       <h2 className="text-2xl font-bold mb-4">Productos</h2>
 
       {/* Formulario */}
@@ -234,7 +241,8 @@ function Products() {
       </form>
 
       {/* Grid de productos */}
-      <div className="grid grid-cols-3 gap-4">
+
+      <div className="grid grid-cols-3 gap-4 hidden">
         {products.map((p) => (
           <div key={p.id} className="bg-white shadow rounded-lg p-4 flex flex-col items-center">
             <img
